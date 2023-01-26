@@ -3,4 +3,5 @@ sudo apt-get install python3-pip
 pip install requests
 follow this guide https://howtoraspberrypi.com/enable-port-serial-raspberry-pi/
 sudo pip3 install adafruit-circuitpython-thermal-printer
-pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+pip3 install flask
