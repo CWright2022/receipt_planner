@@ -2,3 +2,4 @@ sudo apt-get update
 sudo apt-get install python3-pip
 pip install requests
 follow this guide https://howtoraspberrypi.com/enable-port-serial-raspberry-pi/
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
