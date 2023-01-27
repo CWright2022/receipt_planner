@@ -5,10 +5,8 @@ import serial
 printer = Adafruit_Thermal("/dev/serial0",19200,timeout=5)
 
 def print_message(name, message):
-    if name = "":
+    if name == "":
         name = "Anonymous"
-    if message = "":
-        message = "No message provided."
     #print header
     printer.setSize('L')
     printer.justify('C')

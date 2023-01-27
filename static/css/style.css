@@ -1,10 +1,29 @@
 h1 {
     border: 2px #eee solid;
-    color: brown;
+    color: red;
     text-align: center;
     padding: 10px;
+    width: 100vw;
 }
-#message_box
-{
-    height:fit-content
+
+#message_form {
+    text-align: center;
+    color: white
+}
+
+h2 {
+    text-align: center;
+    color: white
+}
+
+body {
+    background-color: black;
+}
+
+#name_box {
+    background-color: white;
+}
+
+#message_box {
+    background-color: white;
 }
