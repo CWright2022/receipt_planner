@@ -17,7 +17,10 @@
         <label for="message_box">Message:</label><br>
         <textarea id="message_box" name="message" rows="5" cols="56" name="comment" placeholder="Your Message"
             form="message_form" maxlength="280" required></textarea><br>
-        <button type="submit">Send!</button>
+        <button id = "submit_button" type="submit">Send!</button><br>
+        <p>{{all_time_count}} messages submitted since the beginning of this project.</p>
+        <p>{{hourly_count}} out of 12 messages submitted this hour.</p>
+
 </body>
 
 </html>
