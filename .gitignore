@@ -3,3 +3,5 @@
 *credentials*
 *.log
 *token*
+hourly_count.txt
+all_time_count.txt
