@@ -11,15 +11,22 @@
     <h1>Cayden-Message-Send-Inator</h1>
     <h2>This website allows you to send a message to a thermal printer in my dorm room!<br>
         It may be down from time to time as I upgrade it.</h2>
+    <hr>
     <form action="{{url_for("name")}}" method="post" id="message_form">
         <label for="name_box">Your Name:</label><br>
         <input type="text" id="name_box" name="name" placeholder="Your Name" size="28" maxlength="28" autofocus><br><br>
         <label for="message_box">Message:</label><br>
         <textarea id="message_box" name="message" rows="5" cols="56" name="comment" placeholder="Your Message"
             form="message_form" maxlength="280" required></textarea><br>
-        <button id = "submit_button" type="submit">Send!</button><br>
+        <button id="submit_button" type="submit">Send!</button><br>
+        <hr>
         <p>{{all_time_count}} messages submitted since the beginning of this project.</p>
         <p>{{hourly_count}} out of 12 messages submitted this hour.</p>
+        <hr>
+        <h2>Recent Messages:</h2>
+        {%for i in range(0, len)%}
+        <p>"{{recent_list[i][1]}}" -{{recent_list[i][0]}}</p>
+        {%endfor%}
 
 </body>
 

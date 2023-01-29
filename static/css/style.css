@@ -31,3 +31,8 @@ body {
     width: 20em;
     height: 4em;
 }
+
+p {
+    color: white;
+    text-align: center;
+}

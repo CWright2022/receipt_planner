@@ -1,0 +1,55 @@
+FROM: Testing
+Just testing message log
+
+FROM: one more time
+music got me feelin so free
+
+FROM: TEST
+Testing recent messages
+
+FROM: testing
+forgot to add a call to update_recent lol
+
+FROM: test
+testing recent messages yet again
+
+FROM: Cayden
+You can now see the 10 most recent messages! How cool is that!
+
+FROM: Cayden
+Testing a new feature where you can see the most recent 10 messages!
+
+FROM: Audree
+Hope you are doing well!! 
+
+FROM: Cayden
+Testing a new feature where you can see the 10 most recent messages!
+
+
+FROM: Cayden
+One more test lol
+
+FROM: Mr. E person 
+What’s your favorite color
+
+FROM: Cayden
+One last test
+
+FROM: hegihgi
+ienfoienf
+
+FROM: fdief
+infeienfine
+
+FROM: tekdf
+kdnfienfief
+
+FROM: ififninef
+ienfienf
+
+FROM: tekfiief
+inefienfinefin
+
+FROM: onefin
+oenfienf
+

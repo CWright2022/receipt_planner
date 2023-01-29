@@ -6,6 +6,12 @@ from print_helper import *
 # Flask constructor
 app = Flask(__name__)
 
+RECENT_MESSAGES = []
+
+HOURLY_LIMIT = 12
+
+RECENT_LIMIT = 10
+
 def increment_counts():
     '''
     increments both hourly and all time counts
@@ -43,20 +49,45 @@ def get_all_time_count():
             count=0
     return count
 
+def log_message(name, message):
+    with open("./message_log.txt", "a+") as file:
+        file.write("FROM: "+name+"\n"+message+"\n\n")
+
+def update_recent(name, message):
+    message_list=[name, message]
+    RECENT_MESSAGES.append(message_list)
+    if len(RECENT_MESSAGES) > RECENT_LIMIT:
+        RECENT_MESSAGES.pop(0)
+
+
 @app.route('/', methods=["GET", "POST"])
 def name():
     messages_this_hour = get_hourly_count()
-    if messages_this_hour >=12:
+    if messages_this_hour >= HOURLY_LIMIT:
         return render_template("too_many.html")
     elif request.method == "POST":
         # getting message from HTML form
         name = request.form.get("name")
         message = request.form.get("message")
+        log_message(name, message)
         print_message(name,message)
         increment_counts()
-        return render_template("success.html")
+        update_recent(name,message)
+        return render_template(
+            "success.html",
+            all_time_count=get_all_time_count(),
+            hourly_count=messages_this_hour,
+            recent_list=RECENT_MESSAGES,
+            len=len(RECENT_MESSAGES)
+        )
     else:
-        return render_template("index.html", all_time_count = get_all_time_count(), hourly_count=messages_this_hour)
+        return render_template(
+            "index.html",
+            all_time_count = get_all_time_count(),
+            hourly_count=messages_this_hour,
+            recent_list=RECENT_MESSAGES,
+            len=len(RECENT_MESSAGES)
+        )
 
 
 if __name__ == '__main__':
