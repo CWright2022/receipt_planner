@@ -2,7 +2,7 @@ from Adafruit_Thermal import *
 import serial
 
 # thermal printer setup
-printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
+# printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
 
 
 def print_message(name, message):
@@ -32,5 +32,21 @@ def print_event(event):
     '''
     prints an event from the calendar service
     '''
+    #get values from event
     title = event["summary"]
-    start_time = event["start"].get("dateTime")
+    start_time = event["start"].get("dateTime")[11:16]
+
+    #do a little formatting to make it look pretty
+    hour = start_time[0:2]
+    mins = start_time[3:8]
+    if int(hour) > 12:
+        new_hour = str(int(hour)-12)
+        start_time = new_hour+":"+mins+" PM"
+    elif hour[0] == "0":
+        start_time = start_time[1:]
+        start_time += " AM"
+    elif int(hour) < 12:
+        start_time += " AM"
+    elif int(hour) == 12:
+        start_time += " PM"
+    print("TITLE: "+title+"   START: "+start_time)

@@ -10,6 +10,7 @@ from __future__ import print_function
 from datetime import datetime
 from datetime import date
 import os.path
+from print_helper import print_event
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -111,7 +112,9 @@ def get_events_from_file(filename, service):
 def main():
 
     service = load_api()
-    get_events_from_file("./calendar_ids.txt", service)
+    events = get_events_from_file("./calendar_ids.txt", service)
+    for event in events:
+        print_event(event)
 
 
 if __name__ == '__main__':
