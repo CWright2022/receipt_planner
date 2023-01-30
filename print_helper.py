@@ -2,7 +2,7 @@ from Adafruit_Thermal import *
 import serial
 
 # thermal printer setup
-# printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
+printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
 
 
 def print_message(name, message):

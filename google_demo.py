@@ -92,7 +92,7 @@ def get_events_from_file(filename, service):
                                               singleEvents=True,
                                               orderBy='startTime',
                                               #   timeMax=tonight,
-                                              maxResults=10,
+                                              maxResults=5,
                                               timeMin=this_morning
 
                                               ).execute()
