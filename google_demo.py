@@ -1,8 +1,15 @@
+'''
+A cool project that will load all calendar events and print them out
+
+By Cayden Wright
+29 January 2023
+'''
+
 from __future__ import print_function
 
-import datetime
+from datetime import datetime
+from datetime import date
 import os.path
-import requests
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -47,29 +54,58 @@ def load_api():
         return None
 
 
+def event_start_sorting_key(event):
+    '''
+    used for sorting the list of events
+    '''
+    return event['start'].get('dateTime')
+
+
 def get_events_from_file(filename, service):
     '''
-    returns all upcoming events from a given file
-    containing calendar IDs one per line'''
+    returns all upcoming events from a given file containing calendar IDs one per line
+
+    filename:string of where to find said file
+    service:object returned by load_api
+    '''
+
+    # empty list to store the calendar IDs
     calendar_ids = []
+    # empty list to store all events in
     events = []
 
-    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+    # create time objects for 12AM today and 11:59 today, thus to include all events for today
+    # now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+    this_morning = datetime.combine(date.today(), datetime.min.time()).isoformat()+"Z"
+    tonight = datetime.combine(date.today(), datetime.max.time()).isoformat()+"Z"
 
+    # read ids from file
     with open(filename) as file:
         for line in file:
             calendar_ids.append(line.strip())
+
+    print(calendar_ids)
+    # then get events for every calendar specified and append to list
     for id in calendar_ids:
-        events_result = service.events().list(calendarId=id, timeMin=now,
+        events_result = service.events().list(calendarId=id,
                                               singleEvents=True,
-                                              orderBy='startTime').execute()
-        events = events_result.get('items', [])
-        if not events:
-            print("NO EVENTS")
-        for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            print(start, event['summary'])
-        print("DONE WITH THIS CALENDAR")
+                                              orderBy='startTime',
+                                              #   timeMax=tonight,
+                                              maxResults=10,
+                                              timeMin=this_morning
+
+                                              ).execute()
+        events += events_result.get('items', [])
+
+        events.sort(key=event_start_sorting_key)
+
+    # if not events:
+    #     print("NO EVENTS")
+    # for event in events:
+    #     start = event['start'].get('dateTime')
+    #     print(start, event['summary'])
+
+    return events
 
 
 def main():
