@@ -9,6 +9,8 @@ from __future__ import print_function
 
 from datetime import datetime
 from datetime import date
+import pytz
+from tzlocal import get_localzone
 import os.path
 from print_helper import print_event
 
@@ -75,11 +77,16 @@ def get_events_from_file(filename, service):
     # empty list to store all events in
     events = []
 
-    # create time objects for 12AM today and 11:59 today, thus to include all events for today
-    # now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    this_morning = datetime.combine(date.today(), datetime.min.time()).isoformat()+"Z"
-    tonight = datetime.combine(date.today(), datetime.max.time()).isoformat()+"Z"
-
+    # create naive time objects for 12AM today and 11:59 today, thus to include all events for today
+    this_morning = datetime.combine(date.today(), datetime.min.time())
+    tonight = datetime.combine(date.today(), datetime.max.time())
+    #localize time objects
+    timezone = get_localzone()
+    this_morning = timezone.localize(this_morning)
+    tonight = timezone.localize(tonight)
+    #serialize time objects, remove offsets too
+    this_morning=this_morning.astimezone(pytz.utc).isoformat()[:-6]+"Z"
+    tonight = tonight.astimezone(pytz.utc).isoformat()[:-6]+"Z"
     # read ids from file
     with open(filename) as file:
         for line in file:
@@ -88,13 +95,10 @@ def get_events_from_file(filename, service):
     print(calendar_ids)
     # then get events for every calendar specified and append to list
     for id in calendar_ids:
-        events_result = service.events().list(calendarId=id,
-                                              singleEvents=True,
-                                              orderBy='startTime',
-                                              #   timeMax=tonight,
-                                              maxResults=5,
-                                              timeMin=this_morning
-
+        #query is run here
+        events_result = service.events().list(calendarId=id, singleEvents=True,
+                                              orderBy='startTime', maxResults=5,
+                                              timeMax=tonight, timeMin=this_morning,
                                               ).execute()
         events += events_result.get('items', [])
 
