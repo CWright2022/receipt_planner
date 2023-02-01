@@ -7,3 +7,5 @@ pip3 install gunicorn
 create systemd service
 pip3 install pytz
 set timezone in raspi-config
+
+pip3 install requests

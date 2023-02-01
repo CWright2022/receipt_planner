@@ -8,3 +8,4 @@ all_time_count.txt
 message_log.txt
 *key*
 *api*
+*__pycache__/
