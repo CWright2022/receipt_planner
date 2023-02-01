@@ -11,7 +11,7 @@ from datetime import datetime
 from datetime import date
 import pytz
 import os.path
-from print_helper import print_event
+from print_helper import *
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -20,7 +20,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
-def load_api():
+def load_calenar_api():
     '''
     starts the Gcal API - shamelessly stole most of this code from a google example
     https://developers.google.com/calendar/api/quickstart/python
@@ -79,8 +79,6 @@ def get_events_from_file(filename, service):
     # create aware time objects for 12AM today and 11:59 today, thus to include all events for today
     this_morning = datetime.combine(date.today(), datetime.min.time(), tzinfo=None)
     tonight = datetime.combine(date.today(), datetime.max.time(), tzinfo=None)
-    print("THIS MORNING =",this_morning)
-    print("TONIGHT =",tonight)
     # serialize time objects, remove offsets too
     this_morning = this_morning.astimezone(pytz.utc).isoformat()[:-6]+"Z"
     tonight = tonight.astimezone(pytz.utc).isoformat()[:-6]+"Z"
@@ -88,8 +86,6 @@ def get_events_from_file(filename, service):
     with open(filename) as file:
         for line in file:
             calendar_ids.append(line.strip())
-
-    print(calendar_ids)
     # then get events for every calendar specified and append to list
     for id in calendar_ids:
         # query is run here
@@ -100,22 +96,19 @@ def get_events_from_file(filename, service):
         events += events_result.get('items', [])
 
         events.sort(key=event_start_sorting_key)
-
-    # if not events:
-    #     print("NO EVENTS")
-    # for event in events:
-    #     start = event['start'].get('dateTime')
-    #     print(start, event['summary'])
-
     return events
 
 
 def main():
-
+    #say hello and print the header and date
+    print_big_header()
+    print_date(date.today())
+    #now load and print the calendar
     service = load_api()
     events = get_events_from_file("./calendar_ids.txt", service)
-    for event in events:
-        print_event(event)
+    print_events(events)
+    #and print a line to end
+    print_end_sequence()
 
 
 if __name__ == '__main__':
