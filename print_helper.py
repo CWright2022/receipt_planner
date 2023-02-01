@@ -1,3 +1,8 @@
+'''
+handles all printing
+change stuff here like the header, etc.
+'''
+
 from Adafruit_Thermal import *
 import serial
 
@@ -8,7 +13,6 @@ try:
     printer_is_present = True
 except:
     print("PRINTER NOT FOUND - USING STANDARD OUTPUT")
-
 
 def print_message(name, message):
     '''
@@ -44,6 +48,10 @@ def print_message(name, message):
         # print a line at the bottom
         print("-"*32)
 
+def print_big_header():
+    printer.setSize('L')
+    printer.justify('C')
+    printer.println("YOUR DAY TODAY")
 
 def print_event(event):
     '''
@@ -66,4 +74,8 @@ def print_event(event):
         start_time += " AM"
     elif int(hour) == 12:
         start_time += " PM"
-    print("TITLE: "+title+"   START: "+start_time)
+    if printer_is_present:
+        number_of_dashes = 32 - len(title) - len(start_time)
+        printer.println(title+"-"*number_of_dashes+start_time)
+    else:
+        print("TITLE: "+title+"   START: "+start_time)

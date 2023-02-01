@@ -79,6 +79,8 @@ def get_events_from_file(filename, service):
     # create aware time objects for 12AM today and 11:59 today, thus to include all events for today
     this_morning = datetime.combine(date.today(), datetime.min.time(), tzinfo=None)
     tonight = datetime.combine(date.today(), datetime.max.time(), tzinfo=None)
+    print("THIS MORNING =",this_morning)
+    print("TONIGHT =",tonight)
     # serialize time objects, remove offsets too
     this_morning = this_morning.astimezone(pytz.utc).isoformat()[:-6]+"Z"
     tonight = tonight.astimezone(pytz.utc).isoformat()[:-6]+"Z"
