@@ -1,5 +1,5 @@
 # importing Flask and other modules
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 
 from print_helper import *
 
@@ -73,13 +73,15 @@ def name():
         print_message(name,message)
         increment_counts()
         update_recent(name,message)
-        return render_template(
-            "success.html",
-            all_time_count=get_all_time_count(),
-            hourly_count=messages_this_hour,
-            recent_list=RECENT_MESSAGES,
-            len=len(RECENT_MESSAGES)
-        )
+        return redirect(
+            url_for('success'))
+        # return render_template(
+        #     "success.html",
+        #     all_time_count=get_all_time_count(),
+        #     hourly_count=messages_this_hour,
+        #     recent_list=RECENT_MESSAGES,
+        #     len=len(RECENT_MESSAGES)
+        # )
     else:
         return render_template(
             "index.html",
@@ -87,6 +89,17 @@ def name():
             hourly_count=messages_this_hour,
             recent_list=RECENT_MESSAGES,
             len=len(RECENT_MESSAGES)
+        )
+
+@app.route("/success")
+def success():
+     # access the result in the tempalte, for example {{ result.name }}
+     return render_template(
+        'success.html',
+        all_time_count=get_all_time_count(),
+            hourly_count=get_hourly_count(),
+            recent_list=RECENT_MESSAGES,
+            length=len(RECENT_MESSAGES)
         )
 
 

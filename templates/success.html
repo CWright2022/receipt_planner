@@ -14,8 +14,9 @@
     <p>{{all_time_count}} messages submitted since the beginning of this project.</p>
     <p>{{hourly_count}} out of 12 messages submitted this hour.</p>
     <hr>
+    <h2><a href="http://messagecayden.student.rit.edu/">Send Another Message</a></h2>
     <h2>Recent Messages:</h2>
-    {%for i in range(0, len)%}
+    {%for i in range(0, length)%}
     <p>"{{recent_list[i][1]}}" -{{recent_list[i][0]}}</p>
     {%endfor%}
 </body>
