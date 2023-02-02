@@ -69,19 +69,15 @@ def name():
         # getting message from HTML form
         name = request.form.get("name")
         message = request.form.get("message")
+        #trim message if needed
+        if len(message) > 280:
+            message=message[:280]
         log_message(name, message)
         print_message(name,message)
         increment_counts()
         update_recent(name,message)
         return redirect(
             url_for('success'))
-        # return render_template(
-        #     "success.html",
-        #     all_time_count=get_all_time_count(),
-        #     hourly_count=messages_this_hour,
-        #     recent_list=RECENT_MESSAGES,
-        #     len=len(RECENT_MESSAGES)
-        # )
     else:
         return render_template(
             "index.html",

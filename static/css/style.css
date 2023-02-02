@@ -25,6 +25,9 @@ body {
 
 #message_box {
     background-color: white;
+    white-space: pre-wrap;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #submit_button {

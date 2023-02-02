@@ -11,6 +11,9 @@
     <h1>Cayden-Message-Send-Inator</h1>
     <h2>This website allows you to send a message to a thermal printer in my dorm room!<br>
         It may be down from time to time as I upgrade it.</h2>
+    <p>Please note: certain characters such as emojis will not render properly. ASCII art must be &lt;32 characters wide
+        to print properly. </p>
+    <p>Input longer than 280 characters will be trimmed to 280 characters.</p>
     <hr>
     <form action="{{url_for("name")}}" method="post" id="message_form">
         <label for="name_box">Your Name:</label><br>
