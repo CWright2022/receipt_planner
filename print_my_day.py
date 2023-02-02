@@ -20,7 +20,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
-def load_calenar_api():
+def load_calendar_api():
     '''
     starts the Gcal API - shamelessly stole most of this code from a google example
     https://developers.google.com/calendar/api/quickstart/python
@@ -104,9 +104,10 @@ def main():
     print_big_header()
     print_date(date.today())
     #now load and print the calendar
-    service = load_api()
+    service = load_calendar_api()
     events = get_events_from_file("./calendar_ids.txt", service)
     print_events(events)
+    #print the weather
     #and print a line to end
     print_end_sequence()
 

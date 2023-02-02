@@ -16,6 +16,7 @@ except:
 
 # printer_is_present = False
 
+
 def print_message(name, message):
     '''
     prints a message from the web messaging service
@@ -50,6 +51,7 @@ def print_message(name, message):
         # print a line at the bottom
         print("-"*32)
 
+
 def print_big_header():
     '''
     prints "YOUR DAY TODAY" real big at the top of the page
@@ -61,6 +63,7 @@ def print_big_header():
     else:
         print("YOUR DAY TODAY")
 
+
 def print_date(date):
     dateString = date.strftime("%A, %B %d, %Y")
     if printer_is_present:
@@ -70,6 +73,7 @@ def print_date(date):
         printer.feed(1)
     else:
         print(dateString)
+
 
 def print_events(events):
     '''
@@ -82,11 +86,11 @@ def print_events(events):
     else:
         print("CALENDAR:")
     for event in events:
-        #get values from event
+        # get values from event
         title = event["summary"]
         start_time = event["start"].get("dateTime")[11:16]
 
-        #do a little formatting to make it look pretty
+        # do a little formatting to make it look pretty
         hour = start_time[0:2]
         mins = start_time[3:8]
         if int(hour) > 12:
@@ -105,7 +109,7 @@ def print_events(events):
             number_of_dashes = 32 - len(title) - len(start_time)
             printer.println(title+"-"*number_of_dashes+start_time)
         else:
-            print("TITLE: "+title+"   START: "+start_time)
+            print(title+"-----"+start_time)
     if len(events) == 0:
         if printer_is_present:
             printer.setSize('S')
@@ -113,6 +117,7 @@ def print_events(events):
             printer.println("NO EVENTS")
         else:
             print("NO EVENTS")
+
 
 def print_end_sequence():
     if printer_is_present:
