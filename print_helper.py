@@ -127,4 +127,3 @@ def print_end_sequence():
         printer.feed(2)
     else:
         print("-"*32)
-        print("\n\n")
