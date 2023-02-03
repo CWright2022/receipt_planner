@@ -69,6 +69,11 @@ def print_events(events):
         elif int(hour) == 12:
             start_time += " PM"
         if printer_is_present:
+            #trim name if whole thing is too long
+            overall_length=len(title)+len(start_time)
+            if overall_length >32:
+                overage = 32-overall_length
+                title = title[:overage-3]+"..."
             printer.setSize('S')
             printer.justify('L')
             number_of_dashes = 32 - len(title) - len(start_time)
@@ -93,7 +98,6 @@ def print_forecast(forecast):
             printer.setSize('S')
             printer.justify('C')
             printer.println("{0}:".format(entry["time"]))
-            printer.justify('L')
             printer.println("{0}°-{1}-{2}mph-POP {3}%".format(entry["temp"], entry["description"], entry["wind_speed"], entry["pop"]))
     else:
         print("WEATHER:")
