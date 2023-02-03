@@ -17,41 +17,6 @@ except:
 # printer_is_present = False
 
 
-def print_message(name, message):
-    '''
-    prints a message from the web messaging service
-    '''
-    if printer_is_present:
-        if name == "":
-            name = "Anonymous"
-        # print header
-        printer.setSize('L')
-        printer.justify('C')
-        printer.println("NEW MESSAGE")
-        # print who it's from
-        printer.setSize('M')
-        printer.println("From: "+name+"\n")
-        # print the message
-        printer.setSize('S')
-        printer.justify('L')
-        printer.println(message+"\n")
-        # print a line at the bottom
-        printer.println("-"*32)
-        # feed 2 lines so its visible
-        printer.feed(2)
-    else:
-        if name == "":
-            name = "Anonymous"
-        # print header
-        print("NEW MESSAGE")
-        # print who it's from
-        print("From: "+name+"\n")
-        # print the message
-        print(message+"\n")
-        # print a line at the bottom
-        print("-"*32)
-
-
 def print_big_header():
     '''
     prints "YOUR DAY TODAY" real big at the top of the page
@@ -81,7 +46,7 @@ def print_events(events):
     '''
     if printer_is_present:
         printer.setSize('M')
-        printer.justify('L')
+        printer.justify('C')
         printer.println("CALENDAR:")
     else:
         print("CALENDAR:")
@@ -117,6 +82,24 @@ def print_events(events):
             printer.println("NO EVENTS")
         else:
             print("NO EVENTS")
+
+
+def print_forecast(forecast):
+    if printer_is_present:
+        printer.setSize('M')
+        printer.justify('C')
+        printer.println("WEATHER:")
+        for entry in forecast:
+            printer.setSize('S')
+            printer.justify('C')
+            printer.println("{0}:".format(entry["time"]))
+            printer.justify('L')
+            printer.println("{0}°-{1}-{2}mph-POP {3}%".format(entry["temp"], entry["description"], entry["wind_speed"], entry["pop"]))
+    else:
+        print("WEATHER:")
+        for entry in forecast:
+            print("{0}:".format(entry["time"]))
+            print("{0}°-{1}-{2}mph-POP {3}% ".format(entry["temp"], entry["description"], entry["wind_speed"], entry["pop"]))
 
 
 def print_end_sequence():

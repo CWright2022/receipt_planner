@@ -9,3 +9,4 @@ message_log.txt
 *key*
 *api*
 *__pycache__/
+.vscode/

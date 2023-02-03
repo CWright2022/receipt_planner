@@ -82,7 +82,7 @@ def get_events_from_file(filename):
     # then get events for every calendar specified and append to list
     for id in calendar_ids:
         # query is run here
-        events_result = service.events().list(calendarId=id, singleEvents=True,
+        events_result = service.events().list(calendarId=id, singleEvents=True,  # type:ignore
                                               orderBy='startTime', maxResults=5,
                                               timeMax=tonight, timeMin=this_morning,
                                               ).execute()

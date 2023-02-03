@@ -6,18 +6,21 @@ By Cayden Wright
 '''
 import calendar_helper as calendar
 import print_helper as printer
-from datetime import *
+import weather_helper as weather
+from datetime import *  # type:ignore
 
 
 def main():
-    #say hello and print the header and date
+    # say hello and print the header and date
     printer.print_big_header()
     printer.print_date(date.today())
-    #now load and print the calendar
+    # now load and print the calendar
     events = calendar.get_events_from_file("./calendar_ids.txt")
     printer.print_events(events)
-    #print the weather
-    #and print a line to end
+    # print the weather
+    weather_results = weather.get_forecast()
+    printer.print_forecast(weather_results)
+    # and print a line to end
     printer.print_end_sequence()
 
 
