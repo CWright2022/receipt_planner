@@ -16,11 +16,11 @@ def main():
     printer.print_big_header()
     printer.print_date(date.today())
     # now load and print the calendar
-    events = calendar.get_events_from_file("/home/pi/receipt_planner/calendar_ids.txt")
+    events = calendar.get_events_from_file("/home/pi/raspberry/receipt_planner/calendar_ids.txt")
     printer.print_events(events)
     # print the weather
-    weather_results = weather.get_forecast()
-    printer.print_forecast(weather_results)
+    # weather_results = weather.get_forecast()
+    # printer.print_forecast(weather_results)
     # and print a line to end
     printer.print_end_sequence()
 

@@ -9,7 +9,7 @@ def get_api_key(filename):
         return key
 
 
-API_KEY = str(get_api_key("/home/pi/receipt_planner/weather_api_key.txt"))
+API_KEY = str(get_api_key("./weather_api_key.txt"))
 UNITS = "imperial"
 
 lat = "43.086480"

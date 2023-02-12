@@ -24,18 +24,18 @@ def load_calendar_api():
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('/home/pi/receipt_planner/token.json'):
-        creds = Credentials.from_authorized_user_file('/home/pi/receipt_planner/token.json', scopes)
+    if os.path.exists('/home/pi/raspberry/receipt_planner/token.json'):
+        creds = Credentials.from_authorized_user_file('/home/pi/raspberry/receipt_planner/token.json', scopes)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                '/home/pi/receipt_planner/credentials.json', scopes)
+                '/home/pi/raspberry/receipt_planner/credentials.json', scopes)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('/home/pi/receipt_planner/token.json', 'w') as token:
+        with open('/home/pi/raspberry/receipt_planner/token.json', 'w') as token:
             token.write(creds.to_json())
 
     try:
@@ -52,6 +52,8 @@ def event_start_sorting_key(event):
     '''
     used for sorting the list of events
     '''
+    if event['start'].get('dateTime') is None:
+        return event['start'].get('date')
     return event['start'].get('dateTime')
 
 
@@ -87,6 +89,5 @@ def get_events_from_file(filename):
                                               timeMax=tonight, timeMin=this_morning,
                                               ).execute()
         events += events_result.get('items', [])
-
-        events.sort(key=event_start_sorting_key)
+    events.sort(key=event_start_sorting_key)
     return events
