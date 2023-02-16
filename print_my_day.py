@@ -27,6 +27,7 @@ def main():
     printer.print_forecast(weather_results)
     #random bible verse
     verse = bible.get_random_verse("/home/pi/receipt_planner/bible_verses.txt")
+    printer.print_verse(verse)
     # and print a line to end
     printer.print_end_sequence()
 

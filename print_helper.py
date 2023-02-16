@@ -25,9 +25,7 @@ def print_big_header():
     if PRINTER_IS_PRESENT:
         printer.setSize('L')
         printer.justify('C')
-        printer.boldOn()
         printer.println("YOUR DAY TODAY")
-        printer.boldOff()
     else:
         print("YOUR DAY TODAY")
 
@@ -51,9 +49,7 @@ def print_events(events):
     if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
-        printer.boldOn()
         printer.println("CALENDAR:")
-        printer.boldOff()
     else:
         print("CALENDAR:")
     for event in events:
@@ -100,14 +96,13 @@ def print_forecast(forecast):
     if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
-        printer.boldOn()
         printer.println("WEATHER:")
-        printer.boldOff()
         printer.setSize('S')
         printer.justify('C')
         for entry in forecast:
             printer.println("{0}:".format(entry["time"]))
             printer.println("{0}°-{1}-{2}mph-POP {3}%".format(entry["temp"], entry["description"], entry["wind_speed"], entry["pop"]))
+        printer.println()
     else:
         print("WEATHER:")
         for entry in forecast:
@@ -119,9 +114,7 @@ def print_tasks(tasks):
     if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
-        printer.boldOn()
         printer.println("DUE TODAY:")
-        printer.boldOff()
         printer.setSize('S')
         for task in tasks:
             printer.println(task['title'])
@@ -131,16 +124,20 @@ def print_tasks(tasks):
         for task in tasks:
             print(task['title'])
 
-
+#TODO: word wrapping
 def print_verse(verse):
     if PRINTER_IS_PRESENT:
         printer.setSize('S')
         printer.justify('C')
         printer.underlineOn()
-        printer.println(re.sub("\n", " ", verse))
+        reference = verse['reference']
+        text = verse['text']
+        printer.println(re.sub("\n", " ", text))
+        printer.println(reference)
         printer.underlineOff()
     else:
-        print(re.sub("\n", " ", verse))
+        print(text)
+        print(reference)
 
 
 def print_end_sequence():
