@@ -1,4 +1,6 @@
 from __future__ import print_function
+from datetime import * #type: ignore
+import pytz
 
 import os.path
 
@@ -37,18 +39,29 @@ def main():
     try:
         service = build('tasks', 'v1', credentials=creds)
 
-        # Call the Tasks API
-        results = service.tasklists().list(maxResults=10, dueMax="2023-02-16").execute()
-        task_lists = results.get('items', [])
+        # get a list of the task lists
+
+        task_lists = service.tasklists().list(maxResults=10).execute()
+        task_lists = task_lists.get('items', [])
 
         if not task_lists:
             print('No task lists found.')
             return
 
-        print('Task lists:')
+        # create aware time objects for 12AM today and 11:59 today, thus to include all tasks for today
+        this_morning = datetime.combine(date.today(), datetime.min.time(), tzinfo=None)
+        tonight = datetime.combine(date.today(), datetime.max.time(), tzinfo=None)
+        # serialize time objects, remove offsets too
+        this_morning = this_morning.astimezone(pytz.utc).isoformat()[:-6]+"Z"
+        tonight = tonight.astimezone(pytz.utc).isoformat()[:-6]+"Z"
+
         for list in task_lists:
             print(u'{0} ({1})'.format(list['title'], list['id']))
-            
+            tasks = service.tasks().list(tasklist=list['id'], dueMin=this_morning, dueMax=tonight).execute()
+            tasks = tasks.get('items', [])
+            for task in tasks:
+                print(task['title'])
+
     except HttpError as err:
         print(err)
 
