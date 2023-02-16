@@ -8,6 +8,7 @@ By Cayden Wright
 import google_services as gservices
 import print_helper as printer
 import weather_helper as weather
+import bible_verses as bible
 from datetime import *  # type:ignore
 
 
@@ -24,6 +25,8 @@ def main():
     # print the weather
     weather_results = weather.get_forecast()
     printer.print_forecast(weather_results)
+    #random bible verse
+    verse = bible.get_random_verse("/home/pi/receipt_planner/bible_verses.txt")
     # and print a line to end
     printer.print_end_sequence()
 

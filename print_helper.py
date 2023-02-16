@@ -3,6 +3,7 @@ handles all printing
 change stuff here like the header, etc.
 '''
 
+import re
 from Adafruit_Thermal import *
 import serial
 
@@ -24,7 +25,9 @@ def print_big_header():
     if PRINTER_IS_PRESENT:
         printer.setSize('L')
         printer.justify('C')
+        printer.boldOn()
         printer.println("YOUR DAY TODAY")
+        printer.boldOff()
     else:
         print("YOUR DAY TODAY")
 
@@ -48,7 +51,9 @@ def print_events(events):
     if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
+        printer.boldOn()
         printer.println("CALENDAR:")
+        printer.boldOff()
     else:
         print("CALENDAR:")
     for event in events:
@@ -95,7 +100,9 @@ def print_forecast(forecast):
     if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
+        printer.boldOn()
         printer.println("WEATHER:")
+        printer.boldOff()
         printer.setSize('S')
         printer.justify('C')
         for entry in forecast:
@@ -112,7 +119,9 @@ def print_tasks(tasks):
     if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
+        printer.boldOn()
         printer.println("DUE TODAY:")
+        printer.boldOff()
         printer.setSize('S')
         for task in tasks:
             printer.println(task['title'])
@@ -121,6 +130,17 @@ def print_tasks(tasks):
         print("DUE TODAY")
         for task in tasks:
             print(task['title'])
+
+
+def print_verse(verse):
+    if PRINTER_IS_PRESENT:
+        printer.setSize('S')
+        printer.justify('C')
+        printer.underlineOn()
+        printer.println(re.sub("\n", " ", verse))
+        printer.underlineOff()
+    else:
+        print(re.sub("\n", " ", verse))
 
 
 def print_end_sequence():
