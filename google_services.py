@@ -12,19 +12,28 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
-def load_calendar_api():
+# create aware time objects for 12AM today and 11:59 today, thus to include all events for today
+THIS_MORNING = datetime.combine(date.today(), datetime.min.time(), tzinfo=None)
+TONIGHT = datetime.combine(date.today(), datetime.max.time(), tzinfo=None)
+# serialize time objects, remove offsets too
+THIS_MORNING = THIS_MORNING.astimezone(pytz.utc).isoformat()[:-6]+"Z"
+TONIGHT = TONIGHT.astimezone(pytz.utc).isoformat()[:-6]+"Z"
+
+
+def load_api(type):
     '''
     starts the Gcal API - shamelessly stole most of this code from a google example
     https://developers.google.com/calendar/api/quickstart/python
 
     Returns an object (i think?) called service that represents the API
     '''
-    scopes = ['https://www.googleapis.com/auth/calendar.readonly']
+    scopes = ['https://www.googleapis.com/auth/calendar.readonly', 'https://www.googleapis.com/auth/tasks.readonly']
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
     if os.path.exists('/home/pi/receipt_planner/token.json'):
+
         creds = Credentials.from_authorized_user_file('/home/pi/receipt_planner/token.json', scopes)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -39,9 +48,11 @@ def load_calendar_api():
             token.write(creds.to_json())
 
     try:
-        service = build('calendar', 'v3', credentials=creds)
-
-        return service
+        if type == "calendar":
+            api = build('calendar', 'v3', credentials=creds)
+        else:
+            api = build('tasks', 'v1', credentials=creds)
+        return api
 
     except HttpError as error:
         print('An HTTP error occurred: %s' % error)
@@ -58,7 +69,7 @@ def event_start_sorting_key(event):
 
 
 def get_events_from_file(filename):
-    service = load_calendar_api()
+    service = load_api("calendar")
     '''
     returns all upcoming events from a given file containing calendar IDs one per line
 
@@ -71,12 +82,6 @@ def get_events_from_file(filename):
     # empty list to store all events in
     events = []
 
-    # create aware time objects for 12AM today and 11:59 today, thus to include all events for today
-    this_morning = datetime.combine(date.today(), datetime.min.time(), tzinfo=None)
-    tonight = datetime.combine(date.today(), datetime.max.time(), tzinfo=None)
-    # serialize time objects, remove offsets too
-    this_morning = this_morning.astimezone(pytz.utc).isoformat()[:-6]+"Z"
-    tonight = tonight.astimezone(pytz.utc).isoformat()[:-6]+"Z"
     # read ids from file
     with open(filename) as file:
         for line in file:
@@ -86,8 +91,31 @@ def get_events_from_file(filename):
         # query is run here
         events_result = service.events().list(calendarId=id, singleEvents=True,  # type:ignore
                                               orderBy='startTime', maxResults=5,
-                                              timeMax=tonight, timeMin=this_morning,
+                                              timeMax=TONIGHT, timeMin=THIS_MORNING,
                                               ).execute()
         events += events_result.get('items', [])
     events.sort(key=event_start_sorting_key)
     return events
+
+
+def get_tasks():
+    service = load_api("tasks")
+    task_lists = service.tasklists().list(maxResults=10).execute()  # type: ignore
+    task_lists = task_lists.get('items', [])
+
+    if not task_lists:
+        print('No task lists found.')
+        return
+
+    # create aware time objects for 12AM today and 11:59 today, thus to include all tasks for today
+    this_morning = datetime.combine(date.today(), datetime.min.time(), tzinfo=None)
+    tonight = datetime.combine(date.today(), datetime.max.time(), tzinfo=None)
+    # serialize time objects, remove offsets too
+    this_morning = this_morning.astimezone(pytz.utc).isoformat()[:-6]+"Z"
+    tonight = tonight.astimezone(pytz.utc).isoformat()[:-6]+"Z"
+    tasks = []
+    for list in task_lists:
+        # print(u'{0} ({1})'.format(list['title'], list['id']))
+        tasks_temp = service.tasks().list(tasklist=list['id'], dueMin=this_morning, dueMax=tonight).execute()  # type:ignore
+        tasks += tasks_temp.get('items', [])
+    return tasks

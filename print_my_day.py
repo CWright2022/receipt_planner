@@ -5,7 +5,7 @@ A cool project that will load all calendar events and print them out
 By Cayden Wright
 29 January 2023
 '''
-import calendar_helper as calendar
+import google_services as gservices
 import print_helper as printer
 import weather_helper as weather
 from datetime import *  # type:ignore
@@ -16,8 +16,11 @@ def main():
     printer.print_big_header()
     printer.print_date(date.today())
     # now load and print the calendar
-    events = calendar.get_events_from_file("/home/pi/receipt_planner/calendar_ids.txt")
+    events = gservices.get_events_from_file("/home/pi/receipt_planner/calendar_ids.txt")
     printer.print_events(events)
+    #print tasks
+    tasks = gservices.get_tasks()
+    printer.print_tasks(tasks)
     # print the weather
     weather_results = weather.get_forecast()
     printer.print_forecast(weather_results)

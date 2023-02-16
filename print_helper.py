@@ -7,21 +7,21 @@ from Adafruit_Thermal import *
 import serial
 
 # check for presence of thermal printer
-printer_is_present = False
+PRINTER_IS_PRESENT = False
 try:
     printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
-    printer_is_present = True
+    PRINTER_IS_PRESENT = True
 except:
     print("PRINTER NOT FOUND - USING STANDARD OUTPUT")
 
-# printer_is_present = False
+# PRINTER_IS_PRESENT = False
 
 
 def print_big_header():
     '''
     prints "YOUR DAY TODAY" real big at the top of the page
     '''
-    if printer_is_present:
+    if PRINTER_IS_PRESENT:
         printer.setSize('L')
         printer.justify('C')
         printer.println("YOUR DAY TODAY")
@@ -31,7 +31,7 @@ def print_big_header():
 
 def print_date(date):
     dateString = date.strftime("%A, %B %d, %Y")
-    if printer_is_present:
+    if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
         printer.println(dateString)
@@ -45,7 +45,7 @@ def print_events(events):
     prints an event from the calendar service
     '''
 
-    if printer_is_present:
+    if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
         printer.println("CALENDAR:")
@@ -75,7 +75,7 @@ def print_events(events):
             start_time += " AM"
         elif int(hour) == 12:
             start_time += " PM"
-        if printer_is_present:
+        if PRINTER_IS_PRESENT:
             printer.setSize('S')
             printer.justify('L')
             number_of_dashes = 32 - len(title) - len(start_time)
@@ -83,7 +83,7 @@ def print_events(events):
         else:
             print(title+"-----"+start_time)
     if len(events) == 0:
-        if printer_is_present:
+        if PRINTER_IS_PRESENT:
             printer.setSize('S')
             printer.justify('L')
             printer.println("NO EVENTS")
@@ -92,15 +92,14 @@ def print_events(events):
 
 
 def print_forecast(forecast):
-    if printer_is_present:
+    if PRINTER_IS_PRESENT:
         printer.setSize('M')
         printer.justify('C')
         printer.println("WEATHER:")
+        printer.setSize('S')
+        printer.justify('C')
         for entry in forecast:
-            printer.setSize('S')
-            printer.justify('C')
             printer.println("{0}:".format(entry["time"]))
-            printer.justify('L')
             printer.println("{0}°-{1}-{2}mph-POP {3}%".format(entry["temp"], entry["description"], entry["wind_speed"], entry["pop"]))
     else:
         print("WEATHER:")
@@ -109,8 +108,23 @@ def print_forecast(forecast):
             print("{0}°-{1}-{2}mph-POP {3}% ".format(entry["temp"], entry["description"], entry["wind_speed"], entry["pop"]))
 
 
+def print_tasks(tasks):
+    if PRINTER_IS_PRESENT:
+        printer.setSize('M')
+        printer.justify('C')
+        printer.println("DUE TODAY:")
+        printer.setSize('S')
+        for task in tasks:
+            printer.println(task['title'])
+
+    else:
+        print("DUE TODAY")
+        for task in tasks:
+            print(task['title'])
+
+
 def print_end_sequence():
-    if printer_is_present:
+    if PRINTER_IS_PRESENT:
         printer.setSize('S')
         printer.justify('L')
         printer.println("-"*32)
